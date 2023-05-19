@@ -52,7 +52,7 @@ else:
     
 TENSORBOARD_LOG = (
     os.path.join(ROOT_DIR, "output", "training", now)
-    + f"_baoding_harder_sde_{args.use_sde}_lattice_{args.use_lattice}_freq_{args.freq}_log_std_init_{args.log_std_init}_std_reg_{args.std_reg}_recurrent_ppo_seed_{args.seed}_resume_{model_name}"
+    + f"_baoding_sde_{args.use_sde}_lattice_{args.use_lattice}_freq_{args.freq}_log_std_init_{args.log_std_init}_std_reg_{args.std_reg}_recurrent_ppo_seed_{args.seed}_resume_{model_name}"
 )
 
 # Reward structure and task parameters:
