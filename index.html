@@ -1,0 +1,265 @@
+<!-- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"> -->
+<html>
+
+<!-- ======================================================================= -->
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+<style type="text/css">
+  body {
+    font-family: "Titillium Web","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight:300;
+    font-size:18px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+
+  h1 {
+    font-weight:300;
+  }
+
+  div {
+    max-width: 95%;
+    margin:auto;
+    padding: 10px;
+  }
+
+  .table-like {
+    display: flex;
+    flex-wrap: wrap;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .disclaimerbox {
+    background-color: #eee;
+    border: 1px solid #eeeeee;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+    padding: 20px;
+  }
+
+  video.header-vid {
+    height: 140px;
+    border: 1px solid black;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+  }
+
+  img {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  iframe {
+    max-width: 100%;
+  }
+
+  img.header-img {
+    height: 140px;
+    border: 1px solid black;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+  }
+
+  img.rounded {
+    border: 1px solid #eeeeee;
+    border-radius: 10px ;
+    -moz-border-radius: 10px ;
+    -webkit-border-radius: 10px ;
+  }
+
+  a:link,a:visited
+  {
+    color: #1367a7;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #208799;
+  }
+
+  td.dl-link {
+    height: 160px;
+    text-align: center;
+    font-size: 22px;
+  }
+
+  .layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+    box-shadow:
+            0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+            5px 5px 0 0px #fff, /* The second layer */
+            5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+            10px 10px 0 0px #fff, /* The third layer */
+            10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+            15px 15px 0 0px #fff, /* The fourth layer */
+            15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+            20px 20px 0 0px #fff, /* The fifth layer */
+            20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+            25px 25px 0 0px #fff, /* The fifth layer */
+            25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+    margin-left: 10px;
+    margin-right: 45px;
+  }
+
+
+  .layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+    box-shadow:
+            0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+            5px 5px 0 0px #fff, /* The second layer */
+            5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+            10px 10px 0 0px #fff, /* The third layer */
+            10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 30px;
+    margin-bottom: 5px;
+  }
+
+  .vert-cent {
+    position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+  }
+
+  hr
+  {
+    border: 0;
+    height: 1px;
+    max-width: 1100px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  }
+
+  #authors td {
+    padding-bottom:5px;
+    padding-top:30px;
+  }
+
+  .authors {
+    font-size: 18px;
+  }
+</style>
+<!-- ======================================================================= -->
+
+
+<script type="text/javascript" src="resources/hidebib.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D96NBKN65J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+  
+      gtag('config', 'G-D96NBKN65J');
+    </script>
+  
+    <div max-width=100%>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- <link rel="icon" type="image/png" href="resources/seal_icon.png"> -->
+    <title>Latent Exploration for Reinforcement Learning</title>
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://amathislab.github.io/lattice" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+  
+    <meta property="og:site_name" content="lattice" />
+    <meta property="og:title" content="Latent Exploration for Reinforcement Learning" />
+    <meta property="og:description" content="Chiappa, Marin Vargas, Huang, Mathis. Latent Exploration for Reinforcement Learning. ArXiv 2023." />
+    <meta property="og:url" content="https://amathislab.github.io/dmap" />
+  
+    <meta property="article:publisher" content="https://amathislab.github.io/lattice" />
+  
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="900" />
+  
+  </head>
+
+<body>
+      <br>
+      <center><span style="font-size:44px;font-weight:bold;">DMAP: a Distributed Morphological Attention Policy for Learning to Locomote with a Changing Body</span></center>
+      <div class="table-like authors" style="justify-content:space-evenly;max-width:800px;margin:auto;">
+        <div><center><span >Alberto Chiappa</span></center>
+         <center><span >EPFL</span></center>
+         </div>
+
+         <div><center><span >Alessandro Marin Vargas</span></center>
+         <center><span >EPFL</span></center>
+         </div>
+
+         <div><center><span >Alexander Mathis</span></center>
+         <center><span >EPFL</span></center>
+         </div>
+
+      </div>
+      <center><span style="font-size:22px;"><a href='https://neurips.cc/'>Neural Information Processing Systems (NeurIPS), 2022</a></span></center>
+
+      <div class="table-like" style="justify-content:space-evenly;max-width:800px;margin:auto;padding:5px">
+        <div><center><span style="font-size:28px"><a href='https://github.com/amathislab/dmap'>[Code]</a></span></center> </div>
+      </div>
+
+      <center>
+      <br>
+      <div style="width:800px; margin:0 auto; text-align=right;">
+          Reinforcement learning typically seeks to learn control policies in stable environments. Yet, real world scenarios require continuous adaptation. In particular, learning to locomote when the length and the thickness of different body parts vary is challenging, as the policy is required to adapt to the current configuration to successfully balance and advance the agent. We study this problem in four classical continuous control environments, augmented with morphological perturbations. We show that a control policy based on the proprioceptive state performs poorly with highly variable body configurations, while an (oracle) agent with access to a learned encoding of the perturbation performs significantly better. We introduce DMAP, a biologically-inspired, attention-based policy network architecture. It combines a distributed policy, with individual controllers for each joint, and an attention mechanism, to dynamically gate sensory information from different body parts. DMAP can be trained end-to-end in all the considered environments and perturbation intensities, overall matching or surpassing the performance of an oracle agent with access to the morphology information. Thus DMAP, implementing principles of control drawn from the biological world, provides a strong inductive bias for learning challenging sensorimotor tasks. Overall, our work corroborates the power of these principles in challenging locomotion tasks.
+      </div>
+      <br><hr>
+
+      <!-- Method -->
+
+      <!-- Results -->
+
+      <!-- Code -->
+
+      <!-- Code -->
+
+      <table align=center width=850px>
+        <center><h1>Paper and Bibtex</h1></center>
+        <tr>
+        <td width=350px align=left>
+        <!-- <p style="margin-top:4px;"></p> -->
+        </td>
+        <td width=50px align=center>
+        </td>
+        <td width=550px align=left>
+        <!-- <p style="margin-top:4px;"></p> -->
+        <p style="text-align:left;"><b><span style="font-size:20pt">Citation</span></b><br/><span style="font-size:6px;">&nbsp;<br/></span> <span style="font-size:15pt">Alberto Chiappa, Alessandro Marin Vargas, Alexander Mathis. <b>DMAP: a Distributed Morphological Attention Policy for Learning to Locomote with a Changing Body. </b> NeurIPS, 2022. <br/> </span></p>
+        <!-- <p style="margin-top:20px;"></p> -->
+        <span style="font-size:20pt"><a shape="rect" href="javascript:togglebib('gcp2020_bib')" class="togglebib">[Bibtex]</a></span>
+        </td>
+        </tr>
+        <tr>
+        <td width=250px align=left>
+        </td>
+        <td width=50px align=center>
+        </td>
+        <td width=550px align=left>
+          <div class="paper" id="gcp2020_bib">
+<pre xml:space="preserve">
+@misc{dmap2022,
+    title={DMAP: a Distributed Morphological Attention Policy for Learning to Locomote with a Changing Body},
+    author={Chiappa, Alberto and Marin Vargas, Alessandro and
+    Mathis, Alexander},
+    year={2022},
+    Booktitle={NeurIPS}
+}</pre>
+          </div>
+          </td>
+          </tr>
+      </table>
+    <br><hr>
+      </table>
+
+<script xml:space="preserve" language="JavaScript">
+hideallbibs();
+</script>
+</div>
+</body>
+</html>
