@@ -1,6 +1,6 @@
 # Latent Exploration for Reinforcement Learning
 
-CODE COMING SOON !!
+Our paper was accepted at NeurIPS 2023, stay tuned for the code!! 
 
 More information on the algorithm as well as results are available on [arxiv](https://arxiv.org/abs/2305.20065)!
 
