@@ -164,7 +164,7 @@ if __name__ == "__main__":
         log_dir=TENSORBOARD_LOG,
         model_config=model_config,
         callbacks=[eval_callback, checkpoint_callback, tensorboard_callback],
-        timesteps=30_000_000,
+        timesteps=20_000_000,
     )
 
     # Train agent
