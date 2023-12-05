@@ -1,6 +1,8 @@
-
 from stable_baselines3.common.preprocessing import get_action_dim
-from models.distributions import LatticeNoiseDistribution
+from models.distributions import (
+    LatticeNoiseDistribution,
+    LatticeStateDependentNoiseDistribution,
+)
 from sb3_contrib.common.recurrent.policies import RecurrentActorCriticPolicy
 
 
@@ -19,11 +21,20 @@ class LatticeRecurrentActorCriticPolicy(RecurrentActorCriticPolicy):
     ):
         super().__init__(observation_space, action_space, lr_schedule, **kwargs)
         if use_lattice:
-            assert self.use_sde == True
-            self.dist_kwargs.update(
-                {"epsilon": expln_eps, "std_clip": std_clip, "std_reg": std_reg, "alpha": alpha}
-            )
-            self.action_dist = LatticeNoiseDistribution(
-                get_action_dim(self.action_space), **self.dist_kwargs
-            )
-            self._build(lr_schedule)
+            if self.use_sde:
+                self.dist_kwargs.update(
+                    {
+                        "epsilon": expln_eps,
+                        "std_clip": std_clip,
+                        "std_reg": std_reg,
+                        "alpha": alpha,
+                    }
+                )
+                self.action_dist = LatticeStateDependentNoiseDistribution(
+                    get_action_dim(self.action_space), **self.dist_kwargs
+                )
+                self._build(lr_schedule)
+            else:
+                self.action_dist = LatticeNoiseDistribution(
+                    get_action_dim(self.action_space)
+                )

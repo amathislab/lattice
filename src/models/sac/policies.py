@@ -1,7 +1,10 @@
 from typing import Any, Dict, List, Optional, Type
 import torch
 from torch import nn
-from models.distributions import LatticeNoiseDistribution
+from models.distributions import (
+    LatticeStateDependentNoiseDistribution,
+    SquashedLatticeNoiseDistribution,
+)
 from stable_baselines3.common.preprocessing import get_action_dim
 from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from stable_baselines3.sac.policies import SACPolicy, Actor
@@ -27,7 +30,7 @@ class LatticeActor(Actor):
         std_clip=(1e-3, 10),
         expln_eps=1e-6,
         std_reg=0,
-        alpha=1
+        alpha=1,
     ):
         super().__init__(
             observation_space,
@@ -50,29 +53,33 @@ class LatticeActor(Actor):
         self.std_reg = std_reg
         self.alpha = alpha
         if use_lattice:
-            assert self.use_sde
-            last_layer_dim = net_arch[-1] if len(net_arch) > 0 else features_dim
-            action_dim = get_action_dim(self.action_space)
-            self.action_dist = LatticeNoiseDistribution(
-                action_dim,
-                full_std=full_std,
-                use_expln=use_expln,
-                squash_output=True,
-                learn_features=True,
-                epsilon=expln_eps,
-                std_clip=std_clip,
-                std_reg=std_reg,
-                alpha=alpha
-            )
-            self.mu, self.log_std = self.action_dist.proba_distribution_net(
-                latent_dim=last_layer_dim,
-                latent_sde_dim=last_layer_dim,
-                log_std_init=log_std_init,
-            )
-            if clip_mean > 0.0:
-                self.mu = nn.Sequential(
-                    self.mu, nn.Hardtanh(min_val=-clip_mean, max_val=clip_mean)
+            if self.use_sde:
+                last_layer_dim = net_arch[-1] if len(net_arch) > 0 else features_dim
+                action_dim = get_action_dim(self.action_space)
+                self.action_dist = LatticeStateDependentNoiseDistribution(
+                    action_dim,
+                    full_std=full_std,
+                    use_expln=use_expln,
+                    squash_output=True,
+                    learn_features=True,
+                    epsilon=expln_eps,
+                    std_clip=std_clip,
+                    std_reg=std_reg,
+                    alpha=alpha,
                 )
+                self.mu, self.log_std = self.action_dist.proba_distribution_net(
+                    latent_dim=last_layer_dim,
+                    latent_sde_dim=last_layer_dim,
+                    log_std_init=log_std_init,
+                )
+                if clip_mean > 0.0:
+                    self.mu = nn.Sequential(
+                        self.mu, nn.Hardtanh(min_val=-clip_mean, max_val=clip_mean)
+                    )
+            else:
+                self.action_dist = SquashedLatticeNoiseDistribution(action_dim)
+                self.mu = nn.Linear(last_layer_dim, action_dim)
+                self.log_std = nn.Linear(last_layer_dim, action_dim)
 
     def _get_constructor_parameters(self) -> Dict[str, Any]:
         data = super()._get_constructor_parameters()
@@ -82,7 +89,7 @@ class LatticeActor(Actor):
                 std_clip=self.std_clip,
                 expln_eps=self.expln_eps,
                 std_reg=self.std_reg,
-                alpha=self.alpha
+                alpha=self.alpha,
             )
         )
         return data
@@ -100,7 +107,7 @@ class LatticeSACPolicy(SACPolicy):
         observation_space,
         action_space,
         lr_schedule,
-        use_lattice=True,
+        use_lattice=False,
         std_clip=(1e-3, 10),
         expln_eps=1e-6,
         std_reg=0,
@@ -116,7 +123,7 @@ class LatticeSACPolicy(SACPolicy):
             "expln_eps": expln_eps,
             "std_clip": std_clip,
             "std_reg": std_reg,
-            "alpha": alpha
+            "alpha": alpha,
         }
         self.actor_kwargs.update(self.lattice_kwargs)
         if use_lattice:
