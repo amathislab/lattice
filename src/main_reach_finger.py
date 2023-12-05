@@ -60,8 +60,7 @@ config = {
     "seed": args.seed,
 }
 
-max_episode_steps = 100  # default: 100
-num_envs = 16  # 16 for training, fewer for debugging
+max_episode_steps = 100
 
 model_config = dict(
     policy=LatticeRecurrentActorCriticPolicy,
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     shutil.copy(os.path.abspath(__file__), TENSORBOARD_LOG)
 
     # Create and wrap the training and evaluations environments
-    envs = make_parallel_envs(config, num_envs)
+    envs = make_parallel_envs(config, args.num_envs)
 
     if args.env_path is not None:
         envs = VecNormalize.load(args.env_path, envs)

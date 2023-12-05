@@ -37,8 +37,6 @@ parser.add_argument('--device', type=str, default="cuda",
                     help='Device, cuda or cpu')
 parser.add_argument('--std_reg', type=float, default=0.0,
                     help='Additional independent std for the multivariate gaussian (only for lattice)')
-parser.add_argument('--target_entropy', type=int, default=-1,
-                    help='Target entropy. If -1, then it is selected automatically.')
 args = parser.parse_args()
 
 # define constants
@@ -50,32 +48,24 @@ if args.model_path is not None:
     model_name = args.model_path.split("/")[-2]
 else:
     model_name = None
-
-if args.target_entropy == -1:
-    target_entropy = "auto"
-else:
-    target_entropy = -args.target_entropy
-
     
-
 TENSORBOARD_LOG = (
     os.path.join(ROOT_DIR, "output", "training", now)
-    + f"_ant_sde_{args.use_sde}_lattice_{args.use_lattice}_freq_{args.freq}_log_std_init_{args.log_std_init}_std_reg_{args.std_reg}_sac_seed_{args.seed}_resume_{model_name}_target_entropy_{target_entropy}_gelu"
+    + f"_ant_sde_{args.use_sde}_lattice_{args.use_lattice}_freq_{args.freq}_log_std_init_{args.log_std_init}_std_reg_{args.std_reg}_sac_seed_{args.seed}_resume_{model_name}"
 )
 
 # Reward structure and task parameters:
 config = {
 }
 
-max_episode_steps = 1000  # default: 1000
-num_envs = args.num_envs  # 16 for training, fewer for debugging
+max_episode_steps = 1000
 
 model_config = dict(
     policy=LatticeSACPolicy,
     device=args.device,
     learning_rate=3e-4,
     buffer_size=300_000,
-    learning_starts=10000,  # TODO: set to 10000
+    learning_starts=10000,
     batch_size=256,
     tau=0.02,
     gamma=0.98,
@@ -85,16 +75,14 @@ model_config = dict(
     replay_buffer_class=None,
     ent_coef="auto",
     target_update_interval=1,
-    # target_entropy=embedding_dim,  # TODO: does it make sense?
-    # target_entropy="auto",
-    target_entropy=target_entropy,
+    target_entropy="auto",
     seed=args.seed,
     use_sde=args.use_sde,
-    sde_sample_freq=args.freq,  # number of steps
+    sde_sample_freq=args.freq,
     policy_kwargs=dict(
         use_lattice=args.use_lattice,
         use_expln=True,
-        log_std_init=args.log_std_init,  # TODO: tune
+        log_std_init=args.log_std_init,
         activation_fn=nn.GELU,
         net_arch=dict(pi=[400, 300], qf=[400, 300]),
         std_clip=(1e-3, 1),
@@ -125,7 +113,7 @@ if __name__ == "__main__":
     shutil.copy(os.path.abspath(__file__), TENSORBOARD_LOG)
 
     # Create and wrap the training and evaluations environments
-    envs = make_parallel_envs(config, num_envs)
+    envs = make_parallel_envs(config, args.num_envs)
 
     if args.env_path is not None:
         envs = VecNormalize.load(args.env_path, envs)

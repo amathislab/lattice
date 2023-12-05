@@ -71,13 +71,12 @@ config = {
         "done": 0,
         "sparse": 0,
     },
-    "goal_orient_range": (-1, 1),  # (-1, 1)
+    "goal_orient_range": (-1, 1),
     "enable_rsi": False,
     "rsi_distance": None,
 }
 
-max_episode_steps = 50  # default: 50
-num_envs = args.num_envs  # 16 for training, fewer for debugging
+max_episode_steps = 100
 
 model_config = dict(
     policy=LatticeRecurrentActorCriticPolicy,
@@ -93,12 +92,12 @@ model_config = dict(
     vf_coef=0.835671,
     n_epochs=10,
     use_sde=args.use_sde,
-    sde_sample_freq=args.freq,  # number of steps
+    sde_sample_freq=args.freq,
     policy_kwargs=dict(
         use_lattice=args.use_lattice,
         use_expln=True,
         ortho_init=False,
-        log_std_init=args.log_std_init,  # TODO: tune
+        log_std_init=args.log_std_init,
         activation_fn=nn.ReLU,
         net_arch=[dict(pi=[256, 256], vf=[256, 256])],
         std_clip=(1e-3, 10),
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     shutil.copy(os.path.abspath(__file__), TENSORBOARD_LOG)
 
     # Create and wrap the training and evaluations environments
-    envs = make_parallel_envs(config, num_envs)
+    envs = make_parallel_envs(config, args.num_envs)
 
     if args.env_path is not None:
         envs = VecNormalize.load(args.env_path, envs)
