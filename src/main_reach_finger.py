@@ -76,12 +76,12 @@ model_config = dict(
     vf_coef=0.835671,
     n_epochs=10,
     use_sde=args.use_sde,
-    sde_sample_freq=args.freq,  # number of steps
+    sde_sample_freq=args.freq,
     policy_kwargs=dict(
         use_lattice=args.use_lattice,
         use_expln=True,
         ortho_init=False,
-        log_std_init=args.log_std_init,  # TODO: tune
+        log_std_init=args.log_std_init,
         activation_fn=nn.ReLU,
         net_arch=[dict(pi=[256, 256], vf=[256, 256])],
         std_clip=(1e-3, 10),
