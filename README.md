@@ -7,7 +7,7 @@ Lattice was build on top of Stable Baselines 3 (version 1.6.1) and it is here im
 This project was developed by Alberto Silvio Chiappa, Alessandro Marin Vargas, Ann Zixiang Huang and Alexander Mathis.
 
 ## MyoChallenge 2023
-We used Lattice to win the NeurIPS 2023 competition [MyoChallenge](https://sites.google.com/view/myosuite/myochallenge/myochallenge-2023?authuser=0), where our team won the object manipulation track. With curriculum learning, reward shaping and Lattice exploration we trained a policy to control a biologically-realistic arm with 63 muscles and 27 degrees of freedom to place random objects inside a box of variable shape:
+We used Lattice train the top submission of the NeurIPS 2023 competition [MyoChallenge](https://sites.google.com/view/myosuite/myochallenge/myochallenge-2023?authuser=0), object manipulation track. With curriculum learning, reward shaping and Lattice exploration we trained a policy to control a biologically-realistic arm with 63 muscles and 27 degrees of freedom to place random objects inside a box of variable shape:
 
 ![relocate](/data/images/myochallenge_2023.gif)
 
