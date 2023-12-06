@@ -1,8 +1,10 @@
 # Lattice (Latent Exploration for Reinforcement Learning)
 
-This repository includes the implementation of Lattice exploration from the paper [Latent Exploration for Reinforcement Learning](https://arxiv.org/abs/2305.20065), published at NeurIPS 2023. Lattice introduces random perturbations in the latent state of the policy network, which result in correlated noise across the system's actuators. This form of latent noise can help exploration in high-dimensional systems, especially with redundant actuation, and often finds low-effort solutions.
+This repository includes the implementation of Lattice exploration from the paper [Latent Exploration for Reinforcement Learning](https://arxiv.org/abs/2305.20065), published at NeurIPS 2023. 
 
-Lattice was build on top of Stable Baselines 3 (version 1.6.1) and it is here implemented for Recurrent PPO and SAC. Integration with a more recent version of Stable Baselines 3 and compatibility with more algorithms is [currently under development](https://github.com/albertochiappa/stable-baselines3).
+Lattice introduces random perturbations in the latent state of the policy network, which result in correlated noise across the system's actuators. This form of latent noise can facilitate exploration when controlling high-dimensional systems, especially with redundant actuation, and may find low-effort solutions.
+
+Lattice builds on top of Stable Baselines 3 (version 1.6.1) and it is here implemented for Recurrent PPO and SAC. Integration with a more recent version of Stable Baselines 3 and compatibility with more algorithms is [currently under development](https://github.com/albertochiappa/stable-baselines3).
 
 This project was developed by Alberto Silvio Chiappa, Alessandro Marin Vargas, Ann Zixiang Huang and Alexander Mathis.
 
@@ -35,7 +37,7 @@ Please note that there is a version error with some packages, e.g. `stable_basel
 
 ## Start a training
 
-We have prepared some main scripts for various environments from [MyoSuite](https://sites.google.com/view/myosuite) and [PyBullet](https://pybullet.org). Starting a training is as easy as
+We have prepared some scripts for various environments of the [MyoSuite](https://sites.google.com/view/myosuite) and [PyBullet](https://pybullet.org). Starting a training is as easy as
 
 ```bash
 python main_pose_elbow.py --use_lattice
@@ -82,7 +84,7 @@ In this case, a policy will be trained with SAC in the Humanoid environment, usi
 
 ## Reference
 
-If our work was useful to your research, please cite us!
+If our work was useful to your research, please cite us
 
 ```
 @article{chiappa2023latent,
