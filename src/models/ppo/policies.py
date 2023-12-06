@@ -33,8 +33,8 @@ class LatticeRecurrentActorCriticPolicy(RecurrentActorCriticPolicy):
                 self.action_dist = LatticeStateDependentNoiseDistribution(
                     get_action_dim(self.action_space), **self.dist_kwargs
                 )
-                self._build(lr_schedule)
             else:
                 self.action_dist = LatticeNoiseDistribution(
                     get_action_dim(self.action_space)
                 )
+            self._build(lr_schedule)

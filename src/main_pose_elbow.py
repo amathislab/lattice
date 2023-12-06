@@ -25,7 +25,7 @@ parser.add_argument('--use_sde', action='store_true', default=False,
                     help='Flag to use SDE')
 parser.add_argument('--use_lattice', action='store_true', default=False,
                     help='Flag to use lattice')
-parser.add_argument('--log_std_init', type=float, default=0.0,
+parser.add_argument('--log_std_init', type=float, default=-1.0,
                     help='Initial log standard deviation')
 parser.add_argument('--env_path', type=str,
                     help='Path to environment file')

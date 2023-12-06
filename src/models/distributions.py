@@ -19,10 +19,13 @@ class LatticeNoiseDistribution(DiagGaussianDistribution):
     def __init__(self, action_dim: int):
         super().__init__(action_dim=action_dim)
 
-    def proba_distribution_net(self, latent_dim: int, log_std_init: float = 0.0) -> Tuple[nn.Module, nn.Parameter]:
+    def proba_distribution_net(self, latent_dim: int, log_std_init: float = 0.0, state_dependent: bool = False) -> Tuple[nn.Module, nn.Parameter]:
         self.mean_actions = nn.Linear(latent_dim, self.action_dim)
         self.std_init = torch.tensor(log_std_init).exp()
-        log_std = nn.Parameter(torch.zeros(self.action_dim + latent_dim), requires_grad=True)
+        if state_dependent:
+            log_std = nn.Linear(latent_dim, self.action_dim + latent_dim)
+        else:
+            log_std = nn.Parameter(torch.zeros(self.action_dim + latent_dim), requires_grad=True)
         return self.mean_actions, log_std
 
     def proba_distribution(self, mean_actions: torch.Tensor, log_std: torch.Tensor) -> "LatticeNoiseDistribution":
@@ -34,10 +37,11 @@ class LatticeNoiseDistribution(DiagGaussianDistribution):
         :return:
         """
         std = log_std.exp() * self.std_init
-        action_variance = std[: self.action_dim] ** 2
-        latent_variance = std[self.action_dim :] ** 2
-        sigma_mat = (self.mean_actions.weight * latent_variance).matmul(self.mean_actions.weight.T)
-        sigma_mat[range(self.action_dim), range(self.action_dim)] += action_variance
+        action_variance = std[..., : self.action_dim] ** 2
+        latent_variance = std[..., self.action_dim :] ** 2
+
+        sigma_mat = (self.mean_actions.weight * latent_variance[..., None, :]).matmul(self.mean_actions.weight.T)
+        sigma_mat[..., range(self.action_dim), range(self.action_dim)] += action_variance
         self.distribution = MultivariateNormal(mean_actions, sigma_mat)
         return self
 
@@ -94,6 +98,7 @@ class SquashedLatticeNoiseDistribution(LatticeNoiseDistribution):
         action = self.actions_from_params(mean_actions, log_std)
         log_prob = self.log_prob(action, self.gaussian_actions)
         return action, log_prob
+
 
 class LatticeStateDependentNoiseDistribution(StateDependentNoiseDistribution):
     """

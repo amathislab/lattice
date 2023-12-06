@@ -53,9 +53,9 @@ class LatticeActor(Actor):
         self.std_reg = std_reg
         self.alpha = alpha
         if use_lattice:
+            last_layer_dim = net_arch[-1] if len(net_arch) > 0 else features_dim
+            action_dim = get_action_dim(self.action_space)
             if self.use_sde:
-                last_layer_dim = net_arch[-1] if len(net_arch) > 0 else features_dim
-                action_dim = get_action_dim(self.action_space)
                 self.action_dist = LatticeStateDependentNoiseDistribution(
                     action_dim,
                     full_std=full_std,
@@ -78,8 +78,7 @@ class LatticeActor(Actor):
                     )
             else:
                 self.action_dist = SquashedLatticeNoiseDistribution(action_dim)
-                self.mu = nn.Linear(last_layer_dim, action_dim)
-                self.log_std = nn.Linear(last_layer_dim, action_dim)
+                self.mu, self.log_std = self.action_dist.proba_distribution_net(last_layer_dim, log_std_init, state_dependent=True)
 
     def _get_constructor_parameters(self) -> Dict[str, Any]:
         data = super()._get_constructor_parameters()
@@ -127,7 +126,6 @@ class LatticeSACPolicy(SACPolicy):
         }
         self.actor_kwargs.update(self.lattice_kwargs)
         if use_lattice:
-            assert use_sde
             self._build(lr_schedule)
 
     def make_actor(
