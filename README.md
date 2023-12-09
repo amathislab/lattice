@@ -9,6 +9,7 @@ Lattice builds on top of Stable Baselines 3 (version 1.6.1) and it is here imple
 This project was developed by Alberto Silvio Chiappa, Alessandro Marin Vargas, Ann Zixiang Huang and Alexander Mathis.
 
 ## MyoChallenge 2023
+
 We used Lattice train the top submission of the NeurIPS 2023 competition [MyoChallenge](https://sites.google.com/view/myosuite/myochallenge/myochallenge-2023?authuser=0), object manipulation track. With curriculum learning, reward shaping and Lattice exploration we trained a policy to control a biologically-realistic arm with 63 muscles and 27 degrees of freedom to place random objects inside a box of variable shape:
 
 ![relocate](/data/images/myochallenge_2023.gif)
@@ -35,15 +36,19 @@ pip install --upgrade cloudpickle==2.2.0 pickle5==0.0.11 pybullet==3.2.5
 
 Please note that there is a version error with some packages, e.g. `stable_baselines3`, requiring a later version of `gym` which `myosuite` is incompatible with. For this reason we could not include all the requirements in `docker/requirements.txt`. In our experiments the stated incompatibility did not cause any error.
 
-## Start a training
+## Training a policy with Lattice
 
-We have prepared some scripts for various environments of the [MyoSuite](https://sites.google.com/view/myosuite) and [PyBullet](https://pybullet.org). Starting a training is as easy as
+We provide scripts for various environments of the [MyoSuite](https://sites.google.com/view/myosuite) and [PyBullet](https://pybullet.org). 
+
+Training a policy is as easy as
 
 ```bash
 python main_pose_elbow.py --use_lattice
 ```
 
-if you have created a conda environment, or
+if you have created a conda environment.
+
+If you prefer to use the readily available docker container, you can train like this:
 
 ```bash
 docker run --rm --gpus all -it \ 
@@ -54,7 +59,7 @@ albertochiappa/myo-cuda-pybullet \
 python3 src/main_pose_elbow.py --use_lattice
 ```
 
-if you prefer to use the readily available docker container. The previous command will start a training in the `Elbow Pose` enviornment using Recurrent PPO. Simply change the main script name to start a training for a different environment. The output of the training, including the configuration used to select the hyperparameters and the tensorboard logs, are saved in a subfolder of `output/`, named as the current date. The code outputs useful information to monitor the training in Tensorboard format. You can run Tensorboard in the output folder to visualize the learning curves and much more. The different configuration hyperparameters can be set from the command line, e.g., by running 
+The previous command will start training in the `Elbow Pose` enviornment using Recurrent PPO. Simply change the main script name to start training for a different environment. The output of the training, including the configuration used to select the hyperparameters and the tensorboard logs, are saved in a subfolder of `output/`, named as the current date. The code outputs useful information to monitor the training in Tensorboard format. You can run Tensorboard in the output folder to visualize the learning curves and much more. The different configuration hyperparameters can be set from the command line, e.g., by running 
 
 ```bash
 python src/main_humanoid.py --use_sde --use_lattice --freq=8
@@ -84,7 +89,7 @@ In this case, a policy will be trained with SAC in the Humanoid environment, usi
 
 ## Reference
 
-If our work was useful to your research, please cite us
+If our work was useful to your research, please cite:
 
 ```
 @article{chiappa2023latent,
