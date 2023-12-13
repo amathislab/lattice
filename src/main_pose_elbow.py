@@ -25,7 +25,7 @@ parser.add_argument('--use_sde', action='store_true', default=False,
                     help='Flag to use SDE')
 parser.add_argument('--use_lattice', action='store_true', default=False,
                     help='Flag to use lattice')
-parser.add_argument('--log_std_init', type=float, default=0.0,
+parser.add_argument('--log_std_init', type=float, default=-1.0,
                     help='Initial log standard deviation')
 parser.add_argument('--env_path', type=str,
                     help='Path to environment file')
@@ -75,8 +75,7 @@ config = {
     "target_distance": 1,
 }
 
-max_episode_steps = 100  # default: 100
-num_envs = args.num_envs  # 16 for training, fewer for debugging
+max_episode_steps = 100
 
 model_config = dict(
     policy=LatticeRecurrentActorCriticPolicy,
@@ -92,12 +91,12 @@ model_config = dict(
     vf_coef=0.835671,
     n_epochs=10,
     use_sde=args.use_sde,
-    sde_sample_freq=args.freq,  # number of steps
+    sde_sample_freq=args.freq,
     policy_kwargs=dict(
         use_lattice=args.use_lattice,
         use_expln=True,
         ortho_init=False,
-        log_std_init=args.log_std_init,  # TODO: tune
+        log_std_init=args.log_std_init,
         activation_fn=nn.ReLU,
         net_arch=[dict(pi=[256, 256], vf=[256, 256])],
         std_clip=(1e-3, 10),
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     shutil.copy(os.path.abspath(__file__), TENSORBOARD_LOG)
 
     # Create and wrap the training and evaluations environments
-    envs = make_parallel_envs(config, num_envs)
+    envs = make_parallel_envs(config, args.num_envs)
 
     if args.env_path is not None:
         envs = VecNormalize.load(args.env_path, envs)
@@ -177,7 +176,7 @@ if __name__ == "__main__":
         log_dir=TENSORBOARD_LOG,
         model_config=model_config,
         callbacks=[eval_callback, checkpoint_callback, tensorboard_callback],
-        timesteps=500_000_000,
+        timesteps=600_000,
     )
 
     # Train agent

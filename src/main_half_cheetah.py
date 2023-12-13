@@ -51,22 +51,22 @@ else:
     
 TENSORBOARD_LOG = (
     os.path.join(ROOT_DIR, "output", "training", now)
-    + f"_half_cheetah_sde_{args.use_sde}_lattice_{args.use_lattice}_freq_{args.freq}_log_std_init_{args.log_std_init}_std_reg_{args.std_reg}_sac_seed_{args.seed}_resume_{model_name}_gelu"
+    + f"_half_cheetah_sde_{args.use_sde}_lattice_{args.use_lattice}_freq_{args.freq}_log_std_init_{args.log_std_init}_std_reg_{args.std_reg}_sac_seed_{args.seed}_resume_{model_name}"
 )
 
 # Reward structure and task parameters:
 config = {
 }
 
-max_episode_steps = 1000  # default: 1000
-num_envs = args.num_envs  # 16 for training, fewer for debugging
+max_episode_steps = 1000
+num_envs = args.num_envs
 
 model_config = dict(
     policy=LatticeSACPolicy,
     device=args.device,
     learning_rate=3e-4,
     buffer_size=300_000,
-    learning_starts=10000,  # TODO: set to 10000
+    learning_starts=10000,
     batch_size=256,
     tau=0.02,
     gamma=0.98,
@@ -76,15 +76,14 @@ model_config = dict(
     replay_buffer_class=None,
     ent_coef="auto",
     target_update_interval=1,
-    # target_entropy=embedding_dim,  # TODO: does it make sense?
     target_entropy="auto",
     seed=args.seed,
     use_sde=args.use_sde,
-    sde_sample_freq=args.freq,  # number of steps
+    sde_sample_freq=args.freq,
     policy_kwargs=dict(
         use_lattice=args.use_lattice,
         use_expln=True,
-        log_std_init=args.log_std_init,  # TODO: tune
+        log_std_init=args.log_std_init,
         activation_fn=nn.GELU,
         net_arch=dict(pi=[400, 300], qf=[400, 300]),
         std_clip=(1e-3, 10),
@@ -156,7 +155,7 @@ if __name__ == "__main__":
         log_dir=TENSORBOARD_LOG,
         model_config=model_config,
         callbacks=[eval_callback, checkpoint_callback, tensorboard_callback],
-        timesteps=1_000_000,
+        timesteps=10_000_000,
     )
 
     # Train agent
