@@ -2,11 +2,11 @@
 
 This repository includes the implementation of Lattice exploration from the paper [Latent Exploration for Reinforcement Learning](https://arxiv.org/abs/2305.20065), published at NeurIPS 2023. 
 
-Lattice introduces random perturbations in the latent state of the policy network, which result in correlated noise across the system's actuators. This form of latent noise can facilitate exploration when controlling high-dimensional systems, especially with redundant actuation, and may find low-effort solutions.
+Lattice introduces random perturbations in the latent state of the policy network, which result in correlated noise across the system's actuators. This form of latent noise can facilitate exploration when controlling high-dimensional systems, especially with redundant actuation, and may find low-effort solutions. A short video explaining the project can be found on [YouTube](https://www.youtube.com/watch?v=_CCF3GDM9jY). 
 
 Lattice builds on top of Stable Baselines 3 (version 1.6.1) and it is here implemented for Recurrent PPO and SAC. Integration with a more recent version of Stable Baselines 3 and compatibility with more algorithms is [currently under development](https://github.com/albertochiappa/stable-baselines3).
 
-This project was developed by Alberto Silvio Chiappa, Alessandro Marin Vargas, Ann Zixiang Huang and Alexander Mathis.
+This project was developed by Alberto Silvio Chiappa, Alessandro Marin Vargas, Ann Zixiang Huang and Alexander Mathis (EPFL).
 
 ## MyoChallenge 2023
 
