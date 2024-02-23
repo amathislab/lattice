@@ -215,6 +215,7 @@ class LatticeStateDependentNoiseDistribution(StateDependentNoiseDistribution):
         latent_dim: int,
         log_std_init: float = 0,
         latent_sde_dim: Optional[int] = None,
+        clip_mean: float = 0,
     ) -> Tuple[nn.Module, nn.Parameter]:
         """
         Create the layers and parameter that represent the distribution:
@@ -226,11 +227,19 @@ class LatticeStateDependentNoiseDistribution(StateDependentNoiseDistribution):
         :param log_std_init: Initial value for the log standard deviation
         :param latent_sde_dim: Dimension of the last layer of the features extractor
             for gSDE. By default, it is shared with the policy network.
+        :param clip_mean: From SB3 implementation of SAC, add possibility to hard clip the
+            mean of the actions.
         :return:
         """
         # Note: we always consider that the noise is based on the features of the last
         # layer, so latent_sde_dim is the same as latent_dim
         self.mean_actions_net = nn.Linear(latent_dim, self.action_dim)
+        if clip_mean > 0:
+            self.clipped_mean_actions_net = nn.Sequential(
+                self.mean_actions_net,
+                nn.Hardtanh(min_val=-clip_mean, max_val=clip_mean))
+        else:
+            self.clipped_mean_actions_net = self.mean_actions_net
         self.latent_sde_dim = latent_dim if latent_sde_dim is None else latent_sde_dim
 
         log_std = (
@@ -243,7 +252,7 @@ class LatticeStateDependentNoiseDistribution(StateDependentNoiseDistribution):
         log_std = nn.Parameter(log_std * log_std_init, requires_grad=True)
         # Sample an exploration matrix
         self.sample_weights(log_std)
-        return self.mean_actions_net, log_std
+        return self.clipped_mean_actions_net, log_std
 
     def proba_distribution(
         self,
@@ -304,7 +313,7 @@ class LatticeStateDependentNoiseDistribution(StateDependentNoiseDistribution):
     def sample(self) -> torch.Tensor:
         latent_noise = self.alpha * self.get_noise(self._latent_sde, self.corr_exploration_mat, self.corr_exploration_matrices)
         action_noise = self.get_noise(self._latent_sde, self.ind_exploration_mat, self.ind_exploration_matrices)
-        actions = self.mean_actions_net(self._latent_sde + latent_noise) + action_noise
+        actions = self.clipped_mean_actions_net(self._latent_sde + latent_noise) + action_noise
         if self.bijector is not None:
             return self.bijector.forward(actions)
         return actions
